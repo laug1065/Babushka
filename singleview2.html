@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>BISTRO BABUSHKA</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .retter {
+            border: 5px solid black;
+            margin: 5px;
+            padding: 5px;
+            background-color: beige;
+
+
+
+        }
+
+        h1 {
+            text-align: center;
+
+        }
+
+        header {
+            background-color: orange;
+
+
+        }
+
+        .valgt {
+
+            background-color: rgba(0, 0, 0, 0.44);
+
+
+        }
+
+        img {
+            width: 400px;
+        }
+
+        #liste {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+
+        .filter {
+            border: black;
+        }
+
+        .menu {
+            text-align: center;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+        <img style="width: 100%;" src="red_star.svg" alt="logo">
+    </header>
+
+
+    <div id="content">
+        <div id="singleview">
+            <div id="tilbage"><button>X</button></div>
+            <div id="indhold"></div>
+        </div>
+    </div>
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+
+
+        let retter = [];
+        let filter = "alle";
+        let ret;
+
+
+        document.addEventListener("DOMContentLoaded", start);
+
+
+        function start() {
+            let dest = document.querySelector("#liste");
+            let temp = document.querySelector("template");
+
+            async function getJson() {
+                let jsonData = await fetch("https://mandalskeawebspace.dk/claude_php/clean_up_spreadsheet.php?id=1jxxxFoWBuMJ1qhQ9BQIAyKHmP38XtAF9_sQr0xo5JLo");
+                retter = await jsonData.json();
+
+
+                retter.forEach(obj => {
+                    if (obj.id == id) {
+                        ret = obj;
+                    }
+                })
+
+                åbn();
+            }
+
+            function åbn() {
+
+                document.querySelector("#indhold").innerHTML =
+
+                    `<article class="retter">
+ <img src="img/large/${ret.billede}.jpg" alt="${ret.navn}">
+
+                        <h2>${ret.navn}</h2>
+
+                        <p>${ret.lang}</p>
+<p>Pris: ${ret.pris}</p>
+
+
+    </article>`;
+
+            }
+
+            document.querySelector("#tilbage button").addEventListener("click", () => {
+                location.href = "singleview1.html"
+            })
+
+
+            getJson();
+        }
+    </script>
+</body>
+
+</html>
